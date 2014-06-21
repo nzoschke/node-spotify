@@ -3,6 +3,7 @@
 
 #include "SpotifyOptions.h"
 #include "User.h"
+#include "InboxPlaylist.h"
 
 #include <libspotify/api.h>
 #include <string>
@@ -16,6 +17,7 @@ public:
   void logout();
   std::string rememberedUser();
   std::shared_ptr<User> sessionUser();
+  std::shared_ptr<Playlist> inboxPlaylist();
 private:
   sp_session* session;
   sp_session* createSession(SpotifyOptions options);
