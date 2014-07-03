@@ -85,3 +85,10 @@ std::shared_ptr<User> Spotify::sessionUser() {
   auto user = std::make_shared<User>(sp_session_user(session));
   return user;
 }
+
+std::shared_ptr<Playlist> Spotify::inboxPlaylist() {
+  std::shared_ptr<Playlist> playlist;
+  auto spotifyPlaylist = sp_session_inbox_create(session);
+  playlist = std::make_shared<InboxPlaylist>(spotifyPlaylist);
+  return playlist;
+}

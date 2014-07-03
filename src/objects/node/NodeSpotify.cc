@@ -165,6 +165,13 @@ Handle<Value> NodeSpotify::getSessionUser(Local<String> property, const Accessor
   return scope.Close(nodeUser->getV8Object());
 }
 
+Handle<Value> NodeSpotify::getInboxPlaylist(Local<String> property, const AccessorInfo& info) {
+  HandleScope scope;
+  NodeSpotify* nodeSpotify = node::ObjectWrap::Unwrap<NodeSpotify>(info.Holder());
+  NodePlaylist* nodePlaylist = new NodePlaylist(nodeSpotify->spotify->inboxPlaylist());
+  return scope.Close(nodePlaylist->getV8Object());
+}
+
 Handle<Value> NodeSpotify::getConstants(Local<String> property, const AccessorInfo& info) {
   HandleScope scope;
   Local<Object> constants = Object::New();
@@ -206,6 +213,7 @@ void NodeSpotify::init() {
   constructorTemplate->InstanceTemplate()->SetAccessor(String::NewSymbol("sessionUser"), getSessionUser);
   constructorTemplate->InstanceTemplate()->SetAccessor(String::NewSymbol("playlistContainer"), getPlaylistContainer);
   constructorTemplate->InstanceTemplate()->SetAccessor(String::NewSymbol("constants"), getConstants);
+  constructorTemplate->InstanceTemplate()->SetAccessor(String::NewSymbol("inboxPlaylist"), getInboxPlaylist);
 
   constructor = Persistent<Function>::New(constructorTemplate->GetFunction());
   scope.Close(Undefined());
