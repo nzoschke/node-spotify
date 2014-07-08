@@ -133,6 +133,16 @@ Handle<Value> NodePlaylist::reorderTracks(const Arguments& args) {
   return scope.Close(Undefined());
 }
 
+Handle<Value> NodePlaylist::setTrackSeen(const Arguments& args) {
+  HandleScope scope;
+  if(args.Length() < 2 || !args[0]->IsNumber() || !args[1]->IsBoolean()) {
+    return scope.Close(V8_EXCEPTION("setTrackSeen needs a number and a boolean as its arguments."));
+  }
+  NodePlaylist* nodePlaylist = node::ObjectWrap::Unwrap<NodePlaylist>(args.This());
+  nodePlaylist->playlist->setTrackSeen(args[0]->ToNumber()->IntegerValue(), args[1]->ToBoolean()->Value());
+  return scope.Close(Undefined());
+}
+
 Handle<Value> NodePlaylist::isLoaded(Local<String> property, const AccessorInfo& info) {
   NodePlaylist* nodePlaylist = node::ObjectWrap::Unwrap<NodePlaylist>(info.Holder());
   return Boolean::New(nodePlaylist->playlist->isLoaded());
@@ -201,6 +211,7 @@ void NodePlaylist::init() {
   NODE_SET_PROTOTYPE_METHOD(constructorTemplate, "addTracks", addTracks);
   NODE_SET_PROTOTYPE_METHOD(constructorTemplate, "removeTracks", removeTracks);
   NODE_SET_PROTOTYPE_METHOD(constructorTemplate, "reorderTracks", reorderTracks);
+  NODE_SET_PROTOTYPE_METHOD(constructorTemplate, "setTrackSeen", setTrackSeen);
 
   constructor = Persistent<Function>::New(constructorTemplate->GetFunction());
   scope.Close(Undefined());
