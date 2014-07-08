@@ -131,3 +131,9 @@ void Playlist::reorderTracks(const int* trackPositions, int numberOfTracks, int 
     throw TracksNotReorderableException("Permission denied");
   }
 }
+
+void Playlist::setTrackSeen(int index, bool seen) {
+  if(sp_playlist_is_loaded(playlist)) {
+    sp_playlist_track_set_seen(playlist, index, seen);
+  }
+}
